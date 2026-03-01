@@ -2,11 +2,10 @@ const { Pool } = require('pg');
 
 // Using a more robust configuration to handle special characters in passwords
 const pool = new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'ciphersqlsandbox',
-    password: '2110@Aditya', // Extracted from user's provided info
-    port: 5432,
+    connectionString: process.env.PG_URI,
+    ssl: {
+        rejectUnauthorized: false // Required for Render/Cloud DBs
+    }
 });
 
 pool.on('error', (err, client) => {

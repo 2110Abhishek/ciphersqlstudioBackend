@@ -24,10 +24,16 @@ app.use('/api/attempts', require('./routes/attemptRoutes'));
 // Remote Seeding Route (Visit this ONCE after deployment: /api/admin/seed)
 app.get('/api/admin/seed', async (req, res) => {
     try {
+        console.log('Starting remote seeding process...');
         const result = await seedData();
         res.json(result);
     } catch (err) {
-        res.status(500).json({ success: false, error: err.message });
+        console.error('Remote Seed Error:', err);
+        res.status(500).json({
+            success: false,
+            error: err.message || 'Unknown error during seeding',
+            details: err.stack
+        });
     }
 });
 
