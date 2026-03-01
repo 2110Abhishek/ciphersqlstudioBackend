@@ -351,11 +351,16 @@ const seedData = async () => {
         await seedPG();
 
         console.log('All seeding completed!');
-        process.exit();
+        return { success: true, message: 'Seeding completed successfully' };
     } catch (err) {
         console.error('Error seeding data:', err);
-        process.exit(1);
+        throw err;
     }
 };
 
-seedData();
+module.exports = seedData;
+
+// Keep this to allow running via 'node src/seed.js' locally
+if (require.main === module) {
+    seedData().then(() => process.exit(0)).catch(() => process.exit(1));
+}
